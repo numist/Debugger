@@ -57,18 +57,18 @@ bool AmIBeingDebugged(void);
             #pragma mark iOS(x86)
 
             #define DebugBreak() \
-                do \
-                { \
-                    int trapSignal = AmIBeingDebugged() ? SIGINT : SIGSTOP; \
-                    __asm__ __volatile__ ( \
-                        "pushl %0\n" \
-                        "pushl %1\n" \
-                        "push $0\n" \
-                        "movl %2, %%eax\n" \
-                        "int $0x80\n" \
-                        "add $12, %%esp\n" \
-                        : : "g" (trapSignal), "g" (getpid ()), "n" (37) : "eax", "cc"); \
-                    } while (false)
+                do { \
+                    if(AmIBeingDebugged()) { \
+                        __asm__ __volatile__ ( \
+                            "pushl %0\n" \
+                            "pushl %1\n" \
+                            "push $0\n" \
+                            "movl %2, %%eax\n" \
+                            "int $0x80\n" \
+                            "add $12, %%esp\n" \
+                            : : "g" (SIGINT), "g" (getpid ()), "n" (37) : "eax", "cc"); \
+                    } \
+                } while (false)
 
         #else
             #pragma mark iOS(unknown)
