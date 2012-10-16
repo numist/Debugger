@@ -28,10 +28,7 @@
 #if defined(DEBUG)
     #include <stdbool.h>
 
-    /*
-     * Breaking into the debugger (if possible) provided by:
-     * http://cocoawithlove.com/2008/03/break-into-debugger.html
-     */
+    // Breaking into the debugger (if possible) provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
     bool AmIBeingDebugged(void);
 
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
@@ -110,10 +107,7 @@
     #endif
 
 #pragma mark High(er) level debugging macros
-    /*
-     * The Check and NotTested functions emit a log message and
-     * will break a watching debugger if possible.
-     */
+    // The Check and NotTested functions emit a log message and will break a watching debugger if possible.
     #define Check(exp) do { \
                 if (exp); \
                 else { \
@@ -122,16 +116,11 @@
                 } \
             } while(0)
     #define NotTested() do { \
-                Log(@"%@", @"NOT TESTED"); \
+                Log(@"NOT TESTED"); \
                 DebugBreak(); \
             } while(0)
 
-    /*
-     * The Log and Assert macros are much more mundane, serving to
-     * prevent the incidence of NSLog calls in Release builds,
-     * improve logging in Debug builds, and
-     * kill the program.
-     */
+    // The Log, Assert, and NotReached macros are much more mundane, serving to prevent the incidence of NSLog calls in Release builds, improve logging in Debug builds, and kill the program.
     #define Log(fmt, ...) NSLog(@"%s:%d <%s> %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [NSString stringWithFormat:(fmt), ##__VA_ARGS__]);
     #define Assert(exp) do { \
                 if (exp); \
@@ -143,14 +132,13 @@
             } while(0)
 
     #define NotReached() do { \
-                Log(@"%@", @"Entered THE TWILIGHT ZONE"); \
+                Log(@"Entered THE TWILIGHT ZONE"); \
                 DebugBreak(); \
                 abort(); \
             } while(0)
 
 #else
-#pragma mark -
-#pragma mark Debugging stubs
+#pragma mark - Debugging stubs
     #define DebugBreak()
     #define Log(...)
     #define Check(exp)
