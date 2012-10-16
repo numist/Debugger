@@ -97,7 +97,7 @@ bool AmIBeingDebugged(void);
         #endif
     #else
         #pragma mark unknown()
-        #warning Debugger: Current platform not supported, sorry (Debugger integration disabled)
+        #warning Debugger: Current platform not supported, please report (Debugger integration disabled)
         #define DebugBreak()
     #endif
 
