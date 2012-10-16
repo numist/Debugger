@@ -11,6 +11,9 @@
 
 #ifdef __OBJC__
 
+#include <stdbool.h>
+bool AmIBeingDebugged(void);
+
 /*
  * The TODO macro allows TODO items to appear as compiler warnings.
  * Always enabled—if you've got something you still need to do, do it before you ship!
@@ -22,11 +25,6 @@
 // TODO: Should this be in a C function instead of a macro in order to force the debugger to break in the right place?
 
 #if defined(DEBUG)
-    #include <stdbool.h>
-
-    // Breaking into the debugger (if possible) provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
-    bool AmIBeingDebugged(void);
-
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
         /*
          * iOS DebugBreak and friends provided by http://iphone.m20.nl/wp/?p=1 (defunct)
