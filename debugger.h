@@ -9,6 +9,8 @@
 #ifndef _DEBUGGER_H_
 #define _DEBUGGER_H_
 
+#ifdef __OBJC__
+
 /*
  * The TODO macro allows TODO items to appear as compiler warnings.
  * Always enabled—if you've got something you still need to do, do it before you ship!
@@ -192,5 +194,6 @@
         } while(0)
 #endif
 
+#endif // __OBJC__
 
 #endif // _DEBUGGER_H_
