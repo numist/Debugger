@@ -104,8 +104,7 @@ bool AmIBeingDebugged(void);
 #pragma mark High(er) level debugging macros
     // The Check and NotTested functions emit a log message and will break a watching debugger if possible.
     #define Check(exp) do { \
-                if (exp); \
-                else { \
+                if (!(exp)) { \
                     Log(@"Failed check `%s`", #exp); \
                     DebugBreak(); \
                 } \
@@ -120,8 +119,7 @@ bool AmIBeingDebugged(void);
 
     // Assert is ALWAYS FATAL on DEBUG! If the error was recoverable, you should be using Check() or Bail…Unless()!
     #define Assert(exp) do { \
-                if (exp); \
-                else { \
+                if (!(exp)) { \
                     Log(@"Failed assertion `%s`", #exp); \
                     DebugBreak(); \
                     abort(); \
