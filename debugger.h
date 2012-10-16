@@ -73,8 +73,16 @@ bool AmIBeingDebugged(void);
             #define DebugBreak() \
                 if(AmIBeingDebugged()) \
                 { \
-                    __asm__("li r0, 20\nsc\nnop\nli r0, 37\nli r4, 2\nsc\nnop\n" \
-                    : : : "memory","r0","r3","r4" ); \
+                    __asm__( \
+                        "li r0, 20\n" \
+                        "sc\n" \
+                        "nop\n" \
+                        "li r0, 37\n" \
+                        "li r4, 2\n" \
+                        "sc\n" \
+                        "nop\n" \
+                        : : : "memory","r0","r3","r4" \
+                    ); \
                 }
 
         #elif defined(__x86_64__) || defined(__i386__)
