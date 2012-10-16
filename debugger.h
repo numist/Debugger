@@ -33,23 +33,16 @@ bool AmIBeingDebugged(void);
         #if defined(__arm__)
             #pragma mark iOS(arm)
 
-            #define DebugStop(signal) \
-                __asm__ __volatile__ ( \
-                    "mov r0, %0\n" \
-                    "mov r1, %1\n" \
-                    "mov r12, #37\n" \
-                    "swi 128\n" \
-                    : : "r" (getpid ()), "r" (signal) : "r12", "r0", "r1", "cc" \
-                )
-
             #define DebugBreak() \
-                do \
-                { \
-                    int trapSignal = AmIBeingDebugged() ? SIGINT : SIGSTOP; \
-                    DebugStop(trapSignal); \
-                    if (trapSignal == SIGSTOP) \
-                    { \
-                        DebugStop( SIGINT ); \
+                do { \
+                    if(AmIBeingDebugged()) { \
+                        __asm__ __volatile__ ( \
+                            "mov r0, %0\n" \
+                            "mov r1, %1\n" \
+                            "mov r12, #37\n" \
+                            "swi 128\n" \
+                            : : "r" (getpid ()), "r" (SIGINT) : "r12", "r0", "r1", "cc" \
+                        ); \
                     } \
                 } while (false)
 
