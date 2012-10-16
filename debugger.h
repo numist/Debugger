@@ -18,13 +18,6 @@
 #define DO_PRAGMA(x) _Pragma (#x)
 #define TODO(x) DO_PRAGMA(message ("TODO - " x))
 
-/*
- * Compile-time checks
- * From: http://stackoverflow.com/questions/9229601/what-is-in-c-code
- */
-#define BUILD_BUG_ON_ZERO(e) (sizeof(struct { int:-!!(e); }))
-#define BUILD_BUG_ON_NULL(e) ((void *)sizeof(struct { int:-!!(e); }))
-
 #pragma mark - DebugBreak implementations for all known platforms
 // TODO: Should this be in a C function instead of a macro in order to force the debugger to break in the right place?
 
