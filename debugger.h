@@ -24,7 +24,7 @@ bool AmIBeingDebugged(void);
 #pragma mark - DebugBreak implementations for all known platforms
 // TODO: Should this be in a C function instead of a macro in order to force the debugger to break in the right place?
 
-#if defined(DEBUG)
+#ifdef DEBUG
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
         /*
          * iOS DebugBreak and friends provided by http://iphone.m20.nl/wp/?p=1 (defunct)
@@ -75,7 +75,8 @@ bool AmIBeingDebugged(void);
             #warning Debugger: Current iOS architecture not supported, please report (Debugger integration disabled)
             #define DebugBreak()
         #endif
-    #elif TARGET_OS_MAC // Technically this stuff should work pretty broadly.
+    #elif TARGET_OS_MAC
+        // Breaking into the debugger on the Mac (if possible) provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
         #if defined(__ppc64__) || defined(__ppc__)
             #pragma mark desktop(ppc)
 
@@ -156,7 +157,7 @@ bool AmIBeingDebugged(void);
                     goto label; \
                 } \
             } while(0)
-#else
+#else // DEBUG
 #pragma mark - Debugging stubs
     #define DebugBreak()
     #define Log(...)
@@ -183,7 +184,7 @@ bool AmIBeingDebugged(void);
                 goto label; \
             } \
         } while(0)
-#endif
+#endif // DEBUG
 
 #endif // __OBJC__
 
