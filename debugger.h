@@ -26,10 +26,7 @@ bool AmIBeingDebugged(void);
 
 #ifdef DEBUG
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-        /*
-         * iOS DebugBreak and friends provided by http://iphone.m20.nl/wp/?p=1 (defunct)
-         * As modified by http://secretspaceman.com/2011/11/assert-yourself/
-         */
+        // iOS DebugBreak initial implementations provided by http://iphone.m20.nl/wp/?p=1 (now defunct). This code has been largely rewritten.
         #if defined(__arm__)
             #pragma mark iOS(arm)
 
@@ -69,7 +66,7 @@ bool AmIBeingDebugged(void);
             #define DebugBreak()
         #endif
     #elif TARGET_OS_MAC
-        // Breaking into the debugger on the Mac (if possible) provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
+        // Mac DebugBreak initial implementations provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
         #if defined(__ppc64__) || defined(__ppc__)
             #pragma mark desktop(ppc)
 
