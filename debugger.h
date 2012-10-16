@@ -161,8 +161,10 @@
     #define DebugBreak()
     #define Log(...)
     #define Check(exp)
-    #define Assert(exp)
     #define NotTested()
+
+    // Should Assert() and NotReached() be fatal on non-debug? Side effects are scary, but failing fast is more instructive to the developer when they get the crash report instead of having to unwind the mess that was created when the code keeps executing past the assertion.
+    #define Assert(exp)
     #define NotReached()
 
     // Macros that affect control flow on condition
