@@ -119,16 +119,11 @@
                 Log(@"NOT TESTED"); \
                 DebugBreak(); \
             } while(0)
-    #define BailUnless(exp,ret) do { \
-                if (!(exp)) { \
-                    Log(@"Failed check `%s`, bailing.", #exp); \
-                    DebugBreak(); \
-                    return (ret); \
-                } \
-            } while(0)
 
     // The Log, Assert, and NotReached macros are much more mundane, serving to prevent the incidence of NSLog calls in Release builds, improve logging in Debug builds, and kill the program.
     #define Log(fmt, ...) NSLog(@"%s:%d <%s> %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [NSString stringWithFormat:(fmt), ##__VA_ARGS__]);
+
+    // Assert is ALWAYS FATAL on DEBUG! If the error was recoverable, you should be using Check() or Bail…Unless()!
     #define Assert(exp) do { \
                 if (exp); \
                 else { \
@@ -138,10 +133,27 @@
                 } \
             } while(0)
 
+    // NotReached is ALWAYS FATAL on DEBUG! If the code path is intentionally reachable, you should be using NotTested()!
     #define NotReached() do { \
                 Log(@"Entered THE TWILIGHT ZONE"); \
                 DebugBreak(); \
                 abort(); \
+            } while(0)
+
+    // Macros that affect control flow on condition
+    #define BailUnless(exp,ret) do { \
+                if (!(exp)) { \
+                    Log(@"Failed check `%s`, bailing.", #exp); \
+                    DebugBreak(); \
+                    return ret; \
+                } \
+            } while(0)
+    #define BailWithBlockUnless(exp,block) do { \
+                if (!(exp)) { \
+                    Log(@"Failed check `%s`, bailing.", #exp); \
+                    DebugBreak(); \
+                    return block(); \
+                } \
             } while(0)
 
 #else
@@ -153,11 +165,18 @@
     #define NotTested()
     #define NotReached()
 
+    // Macros that affect control flow on condition
     #define BailUnless(exp,ret) do { \
             if (!(exp)) { \
-                return (ret); \
+                return ret; \
             } \
         } while(0)
+    #define BailWithBlockUnless(exp,block) do { \
+            if (!(exp)) { \
+                return block(); \
+            } \
+        } while(0)
+
 #endif
 
 
