@@ -6,10 +6,10 @@
 //  Public domain.
 //
 
+#ifdef __OBJC__
+
 #ifndef _DEBUGGER_H_
 #define _DEBUGGER_H_
-
-#ifdef __OBJC__
 
 #include <stdbool.h>
 bool AmIBeingDebugged(void);
@@ -184,6 +184,6 @@ bool AmIBeingDebugged(void);
         } while(0)
 #endif // DEBUG
 
-#endif // __OBJC__
-
 #endif // _DEBUGGER_H_
+
+#endif // __OBJC__
