@@ -24,6 +24,7 @@
 #define BUILD_BUG_ON_NULL(e) ((void *)sizeof(struct { int:-!!(e); }))
 
 #pragma mark - DebugBreak implementations for all known platforms
+// TODO: Should this be in a C function instead of a macro in order to force the debugger to break in the right place?
 
 #if defined(DEBUG)
     #include <stdbool.h>
@@ -163,7 +164,7 @@
     #define Check(exp)
     #define NotTested()
 
-    // Should Assert() and NotReached() be fatal on non-debug? Side effects are scary, but failing fast is more instructive to the developer when they get the crash report instead of having to unwind the mess that was created when the code keeps executing past the assertion.
+    // TODO: Should Assert() and NotReached() be fatal on non-debug? Side effects are scary, but failing fast is more instructive to the developer when they get the crash report instead of having to unwind the mess that was created when the code keeps executing past the assertion.
     #define Assert(exp)
     #define NotReached()
 
