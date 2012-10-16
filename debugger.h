@@ -119,6 +119,13 @@
                 Log(@"NOT TESTED"); \
                 DebugBreak(); \
             } while(0)
+    #define BailUnless(exp,ret) do { \
+                if (!(exp)) { \
+                    Log(@"Failed check `%s`, bailing.", #exp); \
+                    DebugBreak(); \
+                    return (ret); \
+                } \
+            } while(0)
 
     // The Log, Assert, and NotReached macros are much more mundane, serving to prevent the incidence of NSLog calls in Release builds, improve logging in Debug builds, and kill the program.
     #define Log(fmt, ...) NSLog(@"%s:%d <%s> %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [NSString stringWithFormat:(fmt), ##__VA_ARGS__]);
@@ -145,6 +152,12 @@
     #define Assert(exp)
     #define NotTested()
     #define NotReached()
+
+    #define BailUnless(exp,ret) do { \
+            if (!(exp)) { \
+                return (ret); \
+            } \
+        } while(0)
 #endif
 
 
