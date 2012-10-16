@@ -156,7 +156,13 @@
                     return block(); \
                 } \
             } while(0)
-
+    #define BailWithGotoUnless(exp,label) do { \
+                if (!(exp)) { \
+                    Log(@"Failed check `%s`, bailing.", #exp); \
+                    DebugBreak(); \
+                    goto label; \
+                } \
+            } while(0)
 #else
 #pragma mark - Debugging stubs
     #define DebugBreak()
@@ -179,7 +185,11 @@
                 return block(); \
             } \
         } while(0)
-
+    #define BailWithGotoUnless(exp,label) do { \
+            if (!(exp)) { \
+                goto label; \
+            } \
+        } while(0)
 #endif
 
 
