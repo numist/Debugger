@@ -141,11 +141,11 @@
             } while(0)
 
     // Macros that affect control flow on condition
-    #define BailUnless(exp,ret) do { \
+    #define BailUnless(exp,return_value) do { \
                 if (!(exp)) { \
                     Log(@"Failed check `%s`, bailing.", #exp); \
                     DebugBreak(); \
-                    return ret; \
+                    return return_value; \
                 } \
             } while(0)
     #define BailWithBlockUnless(exp,block) do { \
@@ -166,9 +166,9 @@
     #define NotReached()
 
     // Macros that affect control flow on condition
-    #define BailUnless(exp,ret) do { \
+    #define BailUnless(exp,return_value) do { \
             if (!(exp)) { \
-                return ret; \
+                return return_value; \
             } \
         } while(0)
     #define BailWithBlockUnless(exp,block) do { \
