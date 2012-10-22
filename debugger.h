@@ -22,7 +22,6 @@ bool AmIBeingDebugged(void);
 #define TODO(x) DO_PRAGMA(message ("TODO - " x))
 
 #pragma mark - DebugBreak implementations for all known platforms
-// TODO: Should this be in a C function instead of a macro in order to force the debugger to break in the right place?
 
 #ifdef DEBUG
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
