@@ -113,9 +113,11 @@ bool AmIBeingDebugged(void);
                 DebugBreak(); \
             } while(0)
     // The Log, Assert, and NotReached macros are much more mundane, serving to prevent the incidence of NSLog calls in Release builds, improve logging in Debug builds, and kill the program.
-    #define Log(fmt, ...) do { \
-                NSLog(@"%@:%d %@", [[[NSString alloc] initWithCString:(__FILE__) encoding:NSUTF8StringEncoding] lastPathComponent], __LINE__, [NSString stringWithFormat:(fmt), ##__VA_ARGS__]); \
-            } while(0)
+    #ifndef Log
+        #define Log(fmt, ...) do { \
+                    NSLog(@"%@:%d %@", [[[NSString alloc] initWithCString:(__FILE__) encoding:NSUTF8StringEncoding] lastPathComponent], __LINE__, [NSString stringWithFormat:(fmt), ##__VA_ARGS__]); \
+                } while(0)
+    #endif
 
     // Assert is ALWAYS FATAL on DEBUG! If the error was recoverable, you should be using Check() or Bail…Unless()!
     #define Assert(exp) do { \
@@ -158,7 +160,11 @@ bool AmIBeingDebugged(void);
 #else // DEBUG
 #pragma mark - Debugging stubs
     #define DebugBreak()
-    #define Log(...)
+
+    #ifndef Log
+        #define Log(...)
+    #endif
+
     #define Check(exp)
     #define NotTested()
 
