@@ -21,9 +21,10 @@ bool AmIBeingDebugged(void);
 #define DO_PRAGMA(x) _Pragma (#x)
 #define TODO(x) DO_PRAGMA(message ("TODO - " x))
 
+#ifdef DEBUG
+
 #pragma mark - DebugBreak implementations for all known platforms
 
-#ifdef DEBUG
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
         // iOS DebugBreak initial implementations provided by http://iphone.m20.nl/wp/?p=1 (now defunct). This code has been largely rewritten.
         #if defined(__arm__)
