@@ -70,6 +70,12 @@ Emits a message via [`NSLog`](https://developer.apple.com/library/mac/documentat
 
 Prepends the file path, line number, and current function to the format string. Parameters are passed directly to [`NSString +stringWithFormat:`](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/Reference/NSString.html#//apple_ref/occ/clm/NSString/stringWithFormat:). If `DEBUG` is not defined, does nothing.
 
+`Log` can be overridden by defining it before including `debugger.h`, for example if you wanted to add a component prefix to messages in a file:
+
+    #define Log(fmt, ...) NSLog(@"MyComponent: %@", [NSString stringWithFormat:(fmt), ##__VA_ARGS__])
+
+Messages sent to user-defined `Log` includes only a simple message, omitting any file, line, or method information that may be available.
+
 ##### Example
 
     Log(@"View hierarchy: %@", [[UIWindow keyWindow] recursiveDescription]);
