@@ -11,6 +11,7 @@
 #ifndef _DEBUGGER_H_
 #define _DEBUGGER_H_
 
+#include <assert.h>
 #include <stdbool.h>
 bool AmIBeingDebugged(void);
 
@@ -161,8 +162,9 @@ bool AmIBeingDebugged(void);
     #define Check(exp)
     #define NotTested()
 
-    // TODO: Should Assert() and NotReached() be fatal on non-debug? Side effects are scary, but failing fast is more instructive to the developer when they get the crash report instead of having to unwind the mess that was created when the code keeps executing past the assertion.
-    #define Assert(exp)
+    // Assert degrades into an assert on builds without DEBUG defined. (assert can be disabled by defining NDEBUG)
+    #define Assert(exp) assert(exp)
+
     #define NotReached()
 
     // Macros that affect control flow on condition
