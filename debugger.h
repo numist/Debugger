@@ -187,7 +187,12 @@ bool AmIBeingDebugged(void);
     // Assert degrades into an assert on builds without DEBUG defined. (assert can be disabled by defining NDEBUG)
     #define Assert(exp) assert(exp)
 
-    #define NotReached()
+    // NotReached is non-fatal on builds without DEBUG defined, but due to the unpredictable nature of code generation around __builtin_unreachable, your app will be unlucky if it survives.
+    #if __has_builtin(__builtin_unreachable)
+        #define NotReached() __builtin_unreachable()
+    #else
+        #define NotReached()
+    #endif
 
     // Macros that affect control flow on condition
     #define BailUnless(exp,return_value) do { \
