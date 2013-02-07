@@ -164,5 +164,5 @@ License/Credits
 The most interesting code in this project is not originally mine, but was assembled, tested, and in some cases rewritten by me from public sources (Stack Overflow, public documentation, freely released snippets). Thus all code in this project is released to the public domain. While more complete attribution is provided in the source, credit is especially due for:
 
 * `bool AmIBeingDebugged()` provided by an [Apple TechNote](http://developer.apple.com/library/mac/#qa/qa1361/_index.html).
-* `DebugBreak()` for iOS provided by m20.nl (now defunct)
-* `DebugBreak()` for OS X provided by [Matt Gallagher](http://cocoawithlove.com/2008/03/break-into-debugger.html)
+* `DebugBreak()` for iOS code built with toolchains that do not support `__builtin_debugtrap` provided by m20.nl (now defunct)
+* `DebugBreak()` for OS X code built with toolchains that do not support `__builtin_debugtrap` provided by [Matt Gallagher](http://cocoawithlove.com/2008/03/break-into-debugger.html)
