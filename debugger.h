@@ -13,7 +13,6 @@
 
 #include <assert.h>
 #include <stdbool.h>
-bool AmIBeingDebugged(void);
 
 // Compatibility with non-clang compilers.
 #ifndef __has_builtin
@@ -28,6 +27,7 @@ bool AmIBeingDebugged(void);
 #define TODO(x) DO_PRAGMA(message ("TODO - " x))
 
 #ifdef DEBUG
+     bool AmIBeingDebugged(void);
 
     #pragma mark - DebugBreak implementations for all known platforms
 
