@@ -31,89 +31,79 @@
 
     #pragma mark - DebugBreak implementations for all known platforms
 
-    #if __has_builtin(__builtin_debugtrap)
-        // All projects using a modern toolchain can now use the same definition of DebugBreak regardless of architecture or platform.
-        #define DebugBreak() \
-            do { \
-                if(AmIBeingDebugged()) { \
-                    __builtin_debugtrap(); \
-                } \
-            } while (false)
-    #else
-        // Legacy implementations of DebugBreak vary considerably based on architecture and platform.
-        #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-            // iOS DebugBreak initial implementations provided by http://iphone.m20.nl/wp/?p=1 (now defunct). This code has been largely rewritten.
-            #if defined(__arm__)
-                #pragma mark iOS(arm)
+    // Legacy implementations of DebugBreak vary considerably based on architecture and platform.
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+        // iOS DebugBreak initial implementations provided by http://iphone.m20.nl/wp/?p=1 (now defunct). This code has been largely rewritten.
+        #if defined(__arm__)
+            #pragma mark iOS(arm)
 
-                #define DebugBreak() \
-                    do { \
-                        if(AmIBeingDebugged()) { \
-                            __asm__ __volatile__ ( \
-                                "mov r0, %0\n" \
-                                "mov r1, %1\n" \
-                                "mov r12, #37\n" \
-                                "swi 128\n" \
-                                : : "r" (getpid ()), "r" (SIGINT) : "r12", "r0", "r1", "cc" \
-                            ); \
-                        } \
-                    } while (false)
-
-            #elif defined(__i386__) || defined(__x86_64__)
-                #pragma mark iOS(x86)
-
-                #define DebugBreak() \
-                    do { \
-                        if(AmIBeingDebugged()) { \
-                            __asm__ __volatile__ ( \
-                                "pushl %0\n" \
-                                "pushl %1\n" \
-                                "push $0\n" \
-                                "movl %2, %%eax\n" \
-                                "int $0x80\n" \
-                                "add $12, %%esp\n" \
-                                : : "g" (SIGINT), "g" (getpid ()), "n" (37) : "eax", "cc"); \
-                        } \
-                    } while (false)
-
-            #else
-                #pragma mark iOS(unknown)
-                #warning Debugger: Current iOS architecture not supported, please report (Debugger integration disabled)
-                #define DebugBreak()
-            #endif
-        #elif TARGET_OS_MAC
-            // Mac DebugBreak initial implementations provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
-            #if defined(__ppc64__) || defined(__ppc__)
-                #pragma mark desktop(ppc)
-
-                #define DebugBreak() \
-                    if(AmIBeingDebugged()) \
-                    { \
-                        __asm__( \
-                            "li r0, 20\n" \
-                            "sc\n" \
-                            "nop\n" \
-                            "li r0, 37\n" \
-                            "li r4, 2\n" \
-                            "sc\n" \
-                            "nop\n" \
-                            : : : "memory","r0","r3","r4" \
+            #define DebugBreak() \
+                do { \
+                    if(AmIBeingDebugged()) { \
+                        __asm__ __volatile__ ( \
+                            "mov r0, %0\n" \
+                            "mov r1, %1\n" \
+                            "mov r12, #37\n" \
+                            "swi 128\n" \
+                            : : "r" (getpid ()), "r" (SIGINT) : "r12", "r0", "r1", "cc" \
                         ); \
-                    }
+                    } \
+                } while (false)
 
-            #elif defined(__x86_64__) || defined(__i386__)
-                #pragma mark desktop(x86)
-                #define DebugBreak() if(AmIBeingDebugged()) {__asm__("int $3\n" : : );}
-            #else
-                #pragma mark desktop(unknown)
-                #warning Debugger: Current desktop architecture not supported, please report (Debugger integration disabled)
-                #define DebugBreak()
-            #endif
+        #elif defined(__i386__) || defined(__x86_64__)
+            #pragma mark iOS(x86)
+
+            #define DebugBreak() \
+                do { \
+                    if(AmIBeingDebugged()) { \
+                        __asm__ __volatile__ ( \
+                            "pushl %0\n" \
+                            "pushl %1\n" \
+                            "push $0\n" \
+                            "movl %2, %%eax\n" \
+                            "int $0x80\n" \
+                            "add $12, %%esp\n" \
+                            : : "g" (SIGINT), "g" (getpid ()), "n" (37) : "eax", "cc"); \
+                    } \
+                } while (false)
+
         #else
-            #pragma mark unknown()
-            #warning Debugger: Current platform not supported, please report (Debugger integration disabled)
+            #pragma mark iOS(unknown)
+            #warning Debugger: Current iOS architecture not supported, please report (Debugger integration disabled)
             #define DebugBreak()
         #endif
+    #elif TARGET_OS_MAC
+        // Mac DebugBreak initial implementations provided by: http://cocoawithlove.com/2008/03/break-into-debugger.html
+        #if defined(__ppc64__) || defined(__ppc__)
+            #pragma mark desktop(ppc)
+
+            #define DebugBreak() \
+                if(AmIBeingDebugged()) \
+                { \
+                    __asm__( \
+                        "li r0, 20\n" \
+                        "sc\n" \
+                        "nop\n" \
+                        "li r0, 37\n" \
+                        "li r4, 2\n" \
+                        "sc\n" \
+                        "nop\n" \
+                        : : : "memory","r0","r3","r4" \
+                    ); \
+                }
+
+        #elif defined(__x86_64__) || defined(__i386__)
+            #pragma mark desktop(x86)
+            #define DebugBreak() if(AmIBeingDebugged()) {__asm__("int $3\n" : : );}
+        #else
+            #pragma mark desktop(unknown)
+            #warning Debugger: Current desktop architecture not supported, please report (Debugger integration disabled)
+            #define DebugBreak()
+        #endif
+    #else
+        #pragma mark unknown()
+        #warning Debugger: Current platform not supported, please report (Debugger integration disabled)
+        #define DebugBreak()
     #endif
 
 #pragma mark High(er) level debugging macros
