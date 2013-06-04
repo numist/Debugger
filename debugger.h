@@ -171,7 +171,7 @@
         #define Log(...)
     #endif
 
-    #define Check(exp)
+    #define Check(exp) ((void)(exp))
     #define NotTested()
 
     // Assert degrades into an assert on builds without DEBUG defined. (assert can be disabled by defining NDEBUG)
