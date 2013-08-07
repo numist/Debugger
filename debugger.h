@@ -107,23 +107,27 @@
     #endif
 
 #pragma mark High(er) level debugging macros
-    // The Check and NotTested functions emit a log message and will break a watching debugger if possible.
-    #define Check(exp) do { \
-                if (!(exp)) { \
-                    Log(@"Failed check `%s`", #exp); \
-                    DebugBreak(); \
-                } \
-            } while(0)
     #define NotTested() do { \
                 Log(@"NOT TESTED"); \
                 DebugBreak(); \
             } while(0)
+
     // The Log, Assert, and NotReached macros are much more mundane, serving to prevent the incidence of NSLog calls in Release builds, improve logging in Debug builds, and kill the program.
     #ifndef Log
         #define Log(fmt, ...) do { \
                     NSLog(@"%@:%d %@", [[[NSString alloc] initWithCString:(__FILE__) encoding:NSUTF8StringEncoding] lastPathComponent], __LINE__, [NSString stringWithFormat:(fmt), ##__VA_ARGS__]); \
                 } while(0)
     #endif
+
+    // The Check and NotTested functions emit a log message and will break a watching debugger if possible.
+    #define Check(exp) _InternalCheck((exp), #exp)
+    static inline _Bool _InternalCheck(_Bool result, char *expr) {
+        if (!result) {
+            Log(@"Failed check `%s`", expr);
+            DebugBreak();
+        }
+        return result;
+    }
 
     // Assert is ALWAYS FATAL on DEBUG! If the error was recoverable, you should be using Check() or Bail…Unless()!
     #define Assert(exp) do { \
@@ -171,7 +175,7 @@
         #define Log(...)
     #endif
 
-    #define Check(exp) ((void)(exp))
+    #define Check(exp) ((_Bool)(exp))
     #define NotTested()
 
     // Assert degrades into an assert on builds without DEBUG defined. (assert can be disabled by defining NDEBUG)
